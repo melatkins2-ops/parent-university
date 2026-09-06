@@ -1,0 +1,1 @@
+Parent University simplified build. Logos are embedded directly in index.html so they display when the file is opened locally or hosted on GitHub Pages. Upload index.html to the repository root and enable GitHub Pages.
