@@ -169,6 +169,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:4px solid #ffbf
 .accountTools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.accountBtn{border:1px solid #0d3b66;background:#fff;color:#0d3b66;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer}.accountBtn.primary{background:#0d3b66;color:#fff}.accountBtn.user{background:#eef5fa}.accountStatus{font-size:.78rem;color:#526372;font-weight:800}.accountModal[hidden]{display:none}.accountModal{position:fixed;inset:0;z-index:9999;background:rgba(9,28,45,.58);display:grid;place-items:center;padding:20px}.accountDialog{width:min(650px,96vw);max-height:90vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 24px 70px rgba(0,0,0,.28);padding:26px}.accountDialogTop{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.accountDialog h2{margin:4px 0 8px;color:#0d3b66}.accountDialog p{color:#526372;line-height:1.5}.closeAccount{border:0;background:#eef3f7;color:#0d3b66;border-radius:999px;width:42px;height:42px;font-size:1.25rem;font-weight:900}.accountTabs{display:flex;gap:8px;margin:18px 0}.accountTabs button{border:1px solid #9eb9d0;background:#fff;color:#0d3b66;border-radius:999px;padding:9px 13px;font-weight:900}.accountTabs button.active{background:#0d3b66;color:#fff}.accountForm{display:grid;gap:12px}.accountForm label{font-weight:900;color:#1f3345}.accountForm input{width:100%;border:1px solid #9eb9d0;border-radius:12px;padding:12px 13px;font:inherit}.accountForm .formRow{display:grid;grid-template-columns:1fr 1fr;gap:12px}.accountSubmit{border:0;background:#0d3b66;color:#fff;border-radius:12px;padding:12px 15px;font-weight:900;font-size:1rem}.accountBenefits{margin:18px 0;background:#f5f8fb;border-radius:16px;padding:16px}.accountBenefits strong{color:#0d3b66}.accountBenefits ul{margin:9px 0 0 20px;color:#526372;line-height:1.55}.accountPrototypeNote{background:#fff7f1;border-left:4px solid #ef6c22;border-radius:10px;padding:11px 13px;font-size:.83rem;color:#5b4b43;margin-top:14px}.accountProfileCard{display:grid;gap:12px}.accountProfileSummary{background:#f5f8fb;border-radius:16px;padding:16px}.accountProfileSummary strong{display:block;color:#0d3b66;font-size:1.1rem}.accountProfileActions{display:flex;gap:8px;flex-wrap:wrap}.accountProfileActions button{border:1px solid #0d3b66;background:#fff;color:#0d3b66;border-radius:999px;padding:9px 13px;font-weight:900}.accountProfileActions .danger{border-color:#9b2c2c;color:#9b2c2c}.syncBadge{display:inline-flex;align-items:center;gap:6px;background:#eaf3f9;color:#0d3b66;border-radius:999px;padding:6px 9px;font-size:.76rem;font-weight:900}.profileAccountPrompt{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.profileAccountPrompt button{border:1px solid #0d3b66;background:#fff;color:#0d3b66;border-radius:999px;padding:8px 12px;font-weight:900}.profileAccountPrompt .primary{background:#0d3b66;color:#fff}
 @media(max-width:760px){.accountTools{width:100%}.accountBtn{flex:1}.accountForm .formRow{grid-template-columns:1fr}.accountDialog{padding:20px}.familyHeaderTools{flex-wrap:wrap}}
 
+.askedQuestion{display:inline-block;margin:2px 0 12px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:.9rem;max-width:100%;white-space:normal}
 </style>
 
 <style>
@@ -370,23 +371,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:4px solid #ffbf
 </section>
 
 <section class="view" data-page="learn">
-  <section class="pageHero compact"><p class="eyebrow">LEARN & HELP MY SCHOLAR</p><h1>Practical learning, organized around real family moments.</h1><p>Use a five-minute guide, follow an age-based pathway, or take a deeper Parent University course.</p></section>
-  <section class="contentSection"><div class="sectionHead"><div><p class="eyebrow">GUIDED PATHWAYS</p><h2>Choose where your family is right now</h2></div><p>Each pathway combines actions, guides, courses and GRPS resources.</p></div><div id="pathwayGrid" class="pathwayGrid"></div><div id="pathwayDetail" class="pathwayDetail" hidden aria-live="polite"></div></section>
+  <section class="pageHero compact"><p class="eyebrow">LEARN & HELP MY SCHOLAR</p><h1>Practical learning, organized around real family moments.</h1><p>Use a five-minute guide or follow an age-based pathway to get practical help.</p></section>
+  <section class="contentSection"><div class="sectionHead"><div><p class="eyebrow">GUIDED PATHWAYS</p><h2>Choose where your family is right now</h2></div><p>Each pathway combines clear next steps, family guides and trusted resources.</p></div><div id="pathwayGrid" class="pathwayGrid"></div><div id="pathwayDetail" class="pathwayDetail" hidden aria-live="polite"></div></section>
   <section class="contentSection soft"><div class="sectionHead"><div><p class="eyebrow">FIVE-MINUTE FAMILY GUIDES</p><h2>Learn something useful without taking a course.</h2></div></div><div id="guideGrid" class="guideGrid"></div></section>
   <section class="contentSection soft"><div class="sectionHead"><div><p class="eyebrow">GRADE-BY-GRADE</p><h2>What should my scholar be learning?</h2></div><p>Start with a family-friendly snapshot, then use Michigan standards and school information to go deeper.</p></div><div id="gradeGuideGrid" class="gradeGuideGrid"></div><div id="gradeGuideDetail" class="guideDetail" hidden aria-live="polite"></div></section>
-  <section class="contentSection"><div class="sectionHead"><div><p class="eyebrow">DEEPER LEARNING</p><h2>Parent University courses</h2></div><p>Keep the course library, but make it one learning option—not the site's front door.</p></div><div class="courseFeature"><div><span class="badge">ONLINE COURSES</span><h3>Learn at your own pace</h3><p>Explore current Parent University courses, including graduation credits and teaming with teachers.</p><a class="primaryLink" href="https://parents.grps.org/courses/" target="_blank" rel="noopener">View current courses ↗</a></div><div class="miniCards"><article><strong>Graduation Credits</strong><span>Understand what your scholar needs to graduate.</span></article><article><strong>Teaming with Teachers</strong><span>Build a stronger family-school partnership.</span></article><article><strong>Family Skill Building</strong><span>Short, practical learning for everyday needs.</span></article></div></div></section>
-</section>
-
-<section class="view" data-page="connect">
-  <section class="pageHero compact connectHero"><p class="eyebrow">CONNECT</p><h1>Know your people. Build your circle. Use your voice.</h1><p>Parent University should make it easy to know who can help, how to stay connected to school, and where families can build community across Grand Rapids.</p></section>
-  <section class="contentSection connectStart"><div class="sectionHead"><div><p class="eyebrow">START WITH YOUR SCHOOL</p><h2>Four ways to build a stronger school connection.</h2></div><p>You do not have to wait until there is a problem to connect.</p></div>
-    <div class="connectActionGrid">
-      <a href="https://grps.org/schools/" target="_blank" rel="noopener"><span class="connectIcon" aria-hidden="true">⌂</span><strong>Find my school</strong><p>School contacts, leadership, location and building information.</p><b>FIND MY SCHOOL →</b></a>
-      <button type="button" data-view="learn"><span class="connectIcon" aria-hidden="true">A+</span><strong>Prepare for a school conversation</strong><p>Use family guides before conferences, meetings or academic conversations.</p><b>OPEN FAMILY GUIDES →</b></button>
-      <a href="https://parents.grps.org/pals-hub/" target="_blank" rel="noopener"><span class="connectIcon" aria-hidden="true">◎</span><strong>Connect with Parent Action Leaders</strong><p>Learn how PALs connect caregivers, schools and Family & Community Engagement.</p><b>EXPLORE PALS →</b></a>
-      <a href="https://grps.org/departments/face/" target="_blank" rel="noopener"><span class="connectIcon" aria-hidden="true">♥</span><strong>Family & Community Engagement</strong><p>Find family engagement information, support and ways to participate.</p><b>CONNECT WITH FACE →</b></a>
-    </div>
-  </section>
   <section class="contentSection"><div class="contactNavigator"><p class="eyebrow" style="color:#cfe6fb">WHO SHOULD I CONTACT?</p><h2>Tell us what you need. We’ll point you to the right first person.</h2><p>You should not need to understand the district organization chart to get help.</p><div id="contactChoices" class="contactChoices"><button type="button" data-contact="classroom">Learning, grades or classwork</button><button type="button" data-contact="attendance">Attendance or getting to school</button><button type="button" data-contact="wellbeing">Behavior, mental health or belonging</button><button type="button" data-contact="special">IEP, 504 or evaluation</button><button type="button" data-contact="family">Food, housing or family needs</button><button type="button" data-contact="unresolved">I already asked and still need help</button></div><div id="contactResult" class="contactResult" hidden></div></div></section>
   <section class="contentSection soft localConnect"><div class="sectionHead"><div><p class="eyebrow">YOUR GRAND RAPIDS CIRCLE</p><h2>School is one part of a family's support network.</h2></div><p>Use local organizations for learning, belonging, basic needs and opportunities.</p></div>
     <div class="localConnectGrid">
@@ -470,7 +458,6 @@ const resources=[
 {t:'Title IX',c:['safety','engagement'],d:'Information about protections from sex discrimination and sexual harassment.',u:'You need Title IX reporting or procedure information.',a:'https://grps.org/departments/human-resources/title-ix/',type:'Rights & reporting',aud:'All GRPS families'},
 {t:'Scholar Resource & Responsibility Guide',c:['safety','engagement'],d:'District expectations, rights, responsibilities and procedures.',u:'You want to understand district rules or scholar responsibilities.',a:'https://parents.grps.org/resource/grps-handbook/',type:'Guide',aud:'All GRPS families'},
 {t:'GRPS Academics',c:['learning','future'],d:'District academic programs, instructional information and pathways.',u:'You want to understand what and how scholars learn in GRPS.',a:'https://grps.org/departments/academics/',type:'Information',aud:'All GRPS families'},
-{t:'Parent University Courses',c:['learning','engagement','wellness','secondary','future'],d:'Online courses that help caregivers build knowledge and skills.',u:'You want deeper learning instead of a quick guide.',a:'https://parents.grps.org/courses/',type:'Learning',aud:'Parents & caregivers',featured:1},
 {t:'Family & Community Engagement',c:['engagement','community','language'],d:'Parent University, PALs and family-school partnership resources.',u:'You want to get involved or need a family-facing contact.',a:'https://grps.org/departments/face/',type:'Help center',aud:'All GRPS families',featured:1},
 {t:'PALs Hub',c:['engagement'],d:'Meet Parent Action Leaders and learn how PALs connect families and schools.',u:'You want to connect with parent leadership at a school.',a:'https://parents.grps.org/pals-hub/',type:'Leadership',aud:'Parents & caregivers'},
 {t:'Early Childhood',c:['early','enrollment'],d:'Preschool programming, locations and early learning information.',u:'You are exploring preschool or early childhood options.',a:'https://grps.org/departments/early-childhood/',type:'Program',aud:'Early childhood families',featured:1},
@@ -832,6 +819,19 @@ let activeHelpStep='';
 function getStepDetail(cat,step){return helpStepDetails[cat]?.[step]||null}
 function stepScore(r,detail){if(!detail)return 0;let hay=[r.t,r.d,r.u,r.type,r.aud,r.source||'',...r.c].join(' ').toLowerCase();return (detail.keys||[]).reduce((n,k)=>n+(hay.includes(k.toLowerCase())?4:0),0)}
 function chooseHelpStep(cat,step){activeHelpStep=step;renderHelp(cat,'',6);setTimeout(()=>document.querySelector('.answerHero')?.scrollIntoView({behavior:'smooth',block:'nearest'}),50)}
+function directResourceScore(r,direct,q){
+  if(!direct) return 0;
+  let score=0;
+  if(r.t===direct.start) score+=100;
+  const stop=new Set(['a','an','and','are','at','be','can','do','does','for','from','get','how','i','in','is','it','me','my','of','on','or','our','the','this','to','we','what','where','who','with','you','your','scholar','child','family','help','need','should']);
+  const source=[q,direct.title,direct.answer,...(direct.actions||[])].join(' ').toLowerCase();
+  const words=[...new Set(source.replace(/[^a-z0-9\\s-]/g,' ').split(/\\s+/).filter(w=>w.length>3&&!stop.has(w)))];
+  const text=[r.t,r.d,r.u,r.type,r.aud,r.source||'',...(r.c||[])].join(' ').toLowerCase();
+  for(const w of words){ if(text.includes(w)) score+=2; }
+  if((r.c||[]).includes(direct.cat)) score+=4;
+  if(r.local) score+=1;
+  return score;
+}
 function renderHelp(cat=null,term='',limit=6){
 activeNeed=cat;helpLimit=limit;let q=term.trim().toLowerCase();const direct=getDirectAnswer(term);if(!cat&&direct)cat=direct.cat;if(!cat&&q)cat=inferCat(q);activeNeed=cat;
 if(cat!==activeNeed)activeHelpStep='';
@@ -848,12 +848,20 @@ if(q && !list.length){
   list=resources.filter(r=>r.featured||r.local).sort((a,b)=>resourceScore(b,null,'')-resourceScore(a,null,'')).slice(0,6);
 }
 let g=cat?helpGuidance[cat]:null;let detail=g&&activeHelpStep?getStepDetail(cat,activeHelpStep):null;
-list=[...list].sort((a,b)=>(stepScore(b,detail)-stepScore(a,detail))+(resourceScore(b,cat,q)-resourceScore(a,cat,q)));
+if(direct){
+  const pool=resources.filter(r=>(r.c||[]).includes(direct.cat)||r.t===direct.start);
+  list=pool.map(r=>({r,s:directResourceScore(r,direct,term)})).filter(x=>x.s>4||x.r.t===direct.start).sort((a,b)=>b.s-a.s||resourceScore(b.r,direct.cat,q)-resourceScore(a.r,direct.cat,q)).slice(0,8).map(x=>x.r);
+  if(!list.some(r=>r.t===direct.start)){
+    const starter=resources.find(r=>r.t===direct.start); if(starter) list.unshift(starter);
+  }
+}else{
+  list=[...list].sort((a,b)=>(stepScore(b,detail)-stepScore(a,detail))+(resourceScore(b,cat,q)-resourceScore(a,cat,q)));
+}
 if(!list.length){list=resources.filter(r=>r.featured||r.local).slice(0,6);}
 let answer=$('#helpAnswer');
 if(direct){
   let starter=list.find(r=>r.t===direct.start)||list[0];
-  answer.innerHTML=`<div class="answerHero directAnswerHero"><div><p class="eyebrow">ANSWER</p><h2>${escapeHTML(direct.title)}</h2><p class="directAnswerText">${escapeHTML(direct.answer)}</p><div class="nextActions directActions"><strong>What to do next</strong><ol>${direct.actions.map(a=>`<li>${escapeHTML(a)}</li>`).join('')}</ol></div></div>${starter?`<div class="answerStart"><span>BEST FIRST RESOURCE</span><strong>${starter.t}</strong><p>${starter.d}</p><a href="${starter.a}" target="_blank" rel="noopener">Open this resource ↗</a></div>`:''}</div><div class="resultIntro"><div><h3>Resources that support this answer</h3><p class="resourceCount">${list.length} vetted resource${list.length!==1?'s':''} matched to this question.</p></div><button type="button" class="textBtn" id="clearHelpInline">Start over</button></div>`;
+  answer.innerHTML=`<div class="answerHero directAnswerHero"><div><p class="eyebrow">ANSWER TO YOUR QUESTION</p><div class="askedQuestion">${escapeHTML(term)}</div><h2>${escapeHTML(direct.title)}</h2><p class="directAnswerText">${escapeHTML(direct.answer)}</p><div class="nextActions directActions"><strong>What to do next</strong><ol>${direct.actions.map(a=>`<li>${escapeHTML(a)}</li>`).join('')}</ol></div></div>${starter?`<div class="answerStart"><span>BEST FIRST RESOURCE</span><strong>${starter.t}</strong><p>${starter.d}</p><a href="${starter.a}" target="_blank" rel="noopener">Open this resource ↗</a></div>`:''}</div><div class="resultIntro"><div><h3>Resources that support this answer</h3><p class="resourceCount">${list.length} vetted resource${list.length!==1?'s':''} matched to this question.</p></div><button type="button" class="textBtn" id="clearHelpInline">Start over</button></div>`;
 }else if(g && !q){
   let starter=(detail&&list.find(r=>r.t===detail.start))||list.find(r=>r.t===g.start)||list[0];
   let note=detail?.note||g.desc;
