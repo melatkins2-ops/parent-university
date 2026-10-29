@@ -1,0 +1,38 @@
+name: Remove misplaced Family Learning Studio
+on:
+  push:
+    paths: ['.github/workflows/remove-misplaced-studio.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore homepage composition
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          start=s.find('<section id="familyLearningStudio"')
+          if start>=0:
+              end=s.find('</section>',start)
+              if end<0:raise SystemExit('Cannot locate studio section end')
+              s=s[:start]+s[end+len('</section>'):]
+          for marker,close in [('<style id="pu-studio-style">','</style>'),('<script id="pu-studio-script">','</script>')]:
+              a=s.find(marker)
+              if a>=0:
+                  b=s.find(close,a)
+                  if b<0:raise SystemExit('Cannot locate studio style/script end')
+                  s=s[:a]+s[b+len(close):]
+          if 'id="familyLearningStudio"' in s or 'id="pu-studio-script"' in s:raise SystemExit('Studio removal incomplete')
+          p.write_text(s)
+          PY
+      - name: Commit homepage restoration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then git commit -m "Restore Parent University homepage layout"; git push; fi
