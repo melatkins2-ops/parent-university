@@ -1,0 +1,74 @@
+name: Apply Parent University navigation fixes
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/apply-parent-university-fix.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply verified source edits
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          changes=[
+            ('<button type="button" id="resetPersonalization" class="textReset">Reset choices</button></div>',
+             '<button type="button" id="resetPersonalization" class="textReset">Reset choices</button><button type="button" id="clearParentUniversityData" class="textReset" style="display:block;margin-top:10px">Delete all saved Parent University information on this device</button></div>'),
+            ('Saved choices stay in this browser. No account or password is required.',
+             'Saved choices and scholar names stay in this browser, including on shared devices. No account or password is required.'),
+            ("  // Remove the former account prototype and any locally stored plaintext password.",
+             """  document.getElementById('clearParentUniversityData')?.addEventListener('click',()=>{
+              if(!window.confirm('Delete saved scholars, family choices, resources, plans and preferences from this browser? This cannot be undone.'))return;
+              try{Object.keys(localStorage).filter(key=>key.startsWith('pu')).forEach(key=>localStorage.removeItem(key));}
+              catch(e){window.alert('Unable to clear browser storage. Please use your browser settings to clear site data.');return;}
+              window.location.reload();
+            });
+            // Remove the former account prototype and any locally stored plaintext password."""),
+          ]
+          for old,new in changes:
+            if old not in s and new not in s: raise SystemExit('Expected source anchor missing: '+old[:80])
+            if old in s: s=s.replace(old,new,1)
+          marker='<script id="pu-essential-navigation">'
+          if marker not in s:
+            script="""<script id="pu-essential-navigation">
+          (function(){
+            function ready(){
+              const modal=document.getElementById('personalizationModal');
+              const nav=document.getElementById('navigatorWorkspace');
+              const openModal=document.getElementById('openPersonalization');
+              const openNav=document.getElementById('openFamilyNavigator');
+              function showModal(){if(!modal)return;modal.hidden=false;document.body.classList.add('modalOpen');document.getElementById('closePersonalization')?.focus();}
+              function hideModal(){if(!modal)return;modal.hidden=true;document.body.classList.remove('modalOpen');openModal?.focus();}
+              function showNav(){if(!nav)return;nav.hidden=false;nav.scrollIntoView({block:'start'});document.getElementById('closeFamilyNavigator')?.focus();}
+              function hideNav(){if(!nav)return;nav.hidden=true;openNav?.focus();}
+              openModal?.addEventListener('click',showModal);
+              document.getElementById('closePersonalization')?.addEventListener('click',hideModal);
+              document.getElementById('savePersonalization')?.addEventListener('click',hideModal);
+              modal?.addEventListener('click',e=>{if(e.target===modal)hideModal();});
+              openNav?.addEventListener('click',showNav);
+              document.getElementById('closeFamilyNavigator')?.addEventListener('click',hideNav);
+              document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal&&!modal.hidden)hideModal();});
+            }
+            if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready();
+          })();
+          </script>
+          """
+            if '</body>' not in s:raise SystemExit('Missing body close')
+            s=s.replace('</body>',script+'</body>',1)
+          p.write_text(s)
+          PY
+      - name: Commit website update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Fix Parent University navigation and family data controls"
+            git push
+          fi
