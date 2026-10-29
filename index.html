@@ -353,8 +353,8 @@ footer .logoFooter img:last-child{height:auto;width:clamp(145px,18vw,205px)}
       <div class="personalizationStep"><strong>2. What would you like to see more often?</strong><span>Choose as many as you want.</span></div>
       <div id="interestChoices" class="profileChoices interestChoices"><button type="button" data-interest="learning">Learning & grades</button><button type="button" data-interest="attendance">Attendance</button><button type="button" data-interest="special">IEP / 504</button><button type="button" data-interest="wellness">Mental health & wellbeing</button><button type="button" data-interest="future">College, career & graduation</button><button type="button" data-interest="basic">Food, housing & family support</button><button type="button" data-interest="engagement">Family voice & advocacy</button><button type="button" data-interest="summer">Activities & things to do</button></div>
       <div class="commPrefs" aria-labelledby="commPrefsTitle"><h3 id="commPrefsTitle">3. How should Parent University fit your family?</h3><p class="prefHint">These choices change what the site puts first. They do not sign you up for messages.</p><span class="prefLabel">Preferred language</span><div class="prefChoices" id="languagePrefs"><button type="button" data-pref-lang="English">English</button><button type="button" data-pref-lang="Spanish">Español</button><button type="button" data-pref-lang="Kinyarwanda">Kinyarwanda</button><button type="button" data-pref-lang="Swahili">Kiswahili</button><button type="button" data-pref-lang="Somali">Soomaali</button><button type="button" data-pref-lang="Other">Another language</button></div><span class="prefLabel">What kinds of updates matter most?</span><div class="prefChoices" id="updatePrefs"><button type="button" data-pref-update="school">School dates & deadlines</button><button type="button" data-pref-update="learning">Learning & grades</button><button type="button" data-pref-update="attendance">Attendance</button><button type="button" data-pref-update="future">Graduation & future planning</button><button type="button" data-pref-update="activities">Free activities</button><button type="button" data-pref-update="support">Family support</button></div></div>
-      <div class="personalizationFooter"><div><div id="profileNote" class="profileNote">No account is required. Your guest choices stay on this device.</div><button type="button" id="resetPersonalization" class="textReset">Reset choices</button></div><button type="button" id="savePersonalization" class="primaryPersonalize">Done</button></div>
-      <div class="profileAccountPrompt" id="profileAccountPrompt"><span class="syncBadge">ON THIS DEVICE</span><span>Saved choices stay in this browser. No account or password is required.</span></div>
+      <div class="personalizationFooter"><div><div id="profileNote" class="profileNote">No account is required. Your guest choices stay on this device.</div><button type="button" id="resetPersonalization" class="textReset">Reset choices</button><button type="button" id="clearParentUniversityData" class="textReset" style="display:block;margin-top:10px">Delete all saved Parent University information on this device</button></div><button type="button" id="savePersonalization" class="primaryPersonalize">Done</button></div>
+      <div class="profileAccountPrompt" id="profileAccountPrompt"><span class="syncBadge">ON THIS DEVICE</span><span>Saved choices and scholar names stay in this browser, including on shared devices. No account or password is required.</span></div>
       <section class="personalizedBand inModal" aria-labelledby="forYouTitle"><div class="personalizedShell"><div class="personalizedHead"><div><p class="eyebrow">PREVIEW</p><h2 id="forYouTitle">What Parent University will put first</h2><p id="forYouIntro">Your recommendations will adapt as you use the site.</p></div></div><div id="personalizedChips" class="personalizedChips"></div><div id="personalizedGrid" class="personalizedGrid"></div><div id="continuePanel" class="continuePanel" hidden></div><div class="smartRecoSections"><section id="becausePanel" class="smartReco" hidden></section><section id="nextPanel" class="smartReco" hidden></section><section id="localRecoPanel" class="smartReco smartRecoWide" hidden></section></div></div></section>
     </div>
   </div>
@@ -1210,6 +1210,12 @@ const dailyDate=document.getElementById('dailyDate');if(dailyDate){dailyDate.tex
 
 <script>
 (()=>{
+  document.getElementById('clearParentUniversityData')?.addEventListener('click',()=>{
+    if(!window.confirm('Delete saved scholars, family choices, resources, plans and preferences from this browser? This cannot be undone.'))return;
+    try{Object.keys(localStorage).filter(key=>key.startsWith('pu')).forEach(key=>localStorage.removeItem(key));}
+    catch(e){window.alert('Unable to clear browser storage. Please use your browser settings to clear site data.');return;}
+    window.location.reload();
+  });
   // Remove the former account prototype and any locally stored plaintext password.
   try{localStorage.removeItem('puAccountPreview')}catch(e){}
   const modal=document.getElementById('accountModal');
@@ -1344,6 +1350,28 @@ function ics(e){const clean=x=>String(x).replace(/[\\;,]/g,' ').replace(/\n/g,' 
 function mount(){if(document.getElementById('puMilestones'))return;const stage=document.getElementById('puStageAnswer');if(!stage)return;const anchor=stage.closest('section')||stage.parentElement;const section=document.createElement('section');section.id='puMilestones';section.setAttribute('aria-label','GRPS family dates and milestones');section.innerHTML='<p class="eyebrow">2026–27 SCHOOL YEAR</p><h2>Important dates for your family</h2><p>See upcoming GRPS school dates and school-choice opportunities. Save a date to your calendar, or check the official source for updates.</p><div class="puEventControls" role="group" aria-label="Filter important dates"><button type="button" data-pu-event-filter="upcoming" aria-pressed="true">Coming up</button><button type="button" data-pu-event-filter="all" aria-pressed="false">All dates</button><button type="button" data-pu-event-filter="theme" aria-pressed="false">School choice</button></div><div class="puEventList" aria-live="polite"></div><p class="puEventNote">Dates are verified against GRPS district calendar and theme school application information. School-specific events and conference schedules may differ. Check the official links before making plans. This is not a live calendar feed.</p><p><a href="https://grps.org/departments/css/enrollment/" target="_blank" rel="noopener noreferrer">Enrollment and annual registration information ↗</a></p>';
 anchor.insertAdjacentElement('afterend',section);let filter='upcoming';const list=section.querySelector('.puEventList');function draw(){const arr=events.filter(e=>filter==='all'||filter==='theme'&&e[6]==='theme'||filter==='upcoming'&&new Date(e[1]+'T00:00:00')>=today).slice(0,filter==='upcoming'?7:100);list.innerHTML=arr.length?arr.map(e=>'<article class="puEvent"><div class="puEventDate">'+e[2]+'</div><div><h3>'+e[3]+'</h3><p>'+e[5]+'</p><div class="puEventActions"><button type="button" data-pu-event-save="'+events.indexOf(e)+'">Add to calendar</button><a href="'+sources[e[6]]+'" target="_blank" rel="noopener noreferrer">Official GRPS details ↗</a></div></div></article>').join(''):'<p>There are no remaining dates in this published school-year list. Visit the official GRPS calendar for the latest information.</p>'}section.addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.puEventFilter){filter=b.dataset.puEventFilter;section.querySelectorAll('[data-pu-event-filter]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw()}if(b.dataset.puEventSave!==undefined)ics(events[Number(b.dataset.puEventSave)])});draw()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
+})();
+</script>
+<script id="pu-essential-navigation">
+(function(){
+  function ready(){
+    const modal=document.getElementById('personalizationModal');
+    const nav=document.getElementById('navigatorWorkspace');
+    const openModal=document.getElementById('openPersonalization');
+    const openNav=document.getElementById('openFamilyNavigator');
+    function showModal(){if(!modal)return;modal.hidden=false;document.body.classList.add('modalOpen');document.getElementById('closePersonalization')?.focus();}
+    function hideModal(){if(!modal)return;modal.hidden=true;document.body.classList.remove('modalOpen');openModal?.focus();}
+    function showNav(){if(!nav)return;nav.hidden=false;nav.scrollIntoView({block:'start'});document.getElementById('closeFamilyNavigator')?.focus();}
+    function hideNav(){if(!nav)return;nav.hidden=true;openNav?.focus();}
+    openModal?.addEventListener('click',showModal);
+    document.getElementById('closePersonalization')?.addEventListener('click',hideModal);
+    document.getElementById('savePersonalization')?.addEventListener('click',hideModal);
+    modal?.addEventListener('click',e=>{if(e.target===modal)hideModal();});
+    openNav?.addEventListener('click',showNav);
+    document.getElementById('closeFamilyNavigator')?.addEventListener('click',hideNav);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal&&!modal.hidden)hideModal();});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready();
 })();
 </script>
 </body>
