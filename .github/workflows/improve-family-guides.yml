@@ -1,0 +1,37 @@
+name: Improve existing family guides
+on:
+  push:
+    paths: ['.github/workflows/improve-family-guides.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  improve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add practical reflection within existing guide
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html');s=p.read_text()
+          if 'id="puGuidePractice"' in s:raise SystemExit('Practice already installed')
+          needle='<div class="helpfulBox"><strong>Was this helpful?</strong>'
+          if s.count(needle)!=1:raise SystemExit('Expected guide template not found')
+          practice='''<div id="puGuidePractice" class="puGuidePractice"><h3>Put this into practice</h3><p>Think about your scholar and choose one step from this guide that you can try this week.</p><label for="puGuidePlan">What will you try, and when?</label><textarea id="puGuidePlan" rows="3" placeholder="Example: On Tuesday, I will ask the teacher which skill we should focus on."></textarea><div class="puGuidePracticeActions"><button type="button" id="puGuidePlanCopy">Copy my next step</button><span id="puGuidePlanStatus" role="status" aria-live="polite"></span></div></div>'''
+          s=s.replace(needle,practice+needle,1)
+          # event delegation: reuses the site's existing event handling and guide lifecycle
+          js='''<script id="pu-guide-practice-script">(function(){document.addEventListener('click',async function(e){const b=e.target.closest('#puGuidePlanCopy');if(!b)return;const input=document.getElementById('puGuidePlan');const status=document.getElementById('puGuidePlanStatus');if(!input||!status)return;const value=input.value.trim();if(!value){status.textContent='Write your next step first.';input.focus();return;}try{await navigator.clipboard.writeText(value);status.textContent='Your next step was copied.';}catch(_){input.select();status.textContent='Select and copy your next step.';}});})();</script>'''
+          css='''<style id="pu-guide-practice-style">.puGuidePractice{margin:24px 0;padding:22px;border:1px solid #d9e1e8;border-radius:12px;background:#f8fafb}.puGuidePractice h3{margin:0 0 10px}.puGuidePractice p{margin:0 0 14px;line-height:1.5}.puGuidePractice label{display:block;font-weight:700;margin-bottom:8px}.puGuidePractice textarea{display:block;box-sizing:border-box;width:100%;max-width:100%;min-height:100px;padding:12px;border:1px solid #8594a4;border-radius:8px;font:inherit;background:#fff}.puGuidePracticeActions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:12px}.puGuidePracticeActions button{border:0;border-radius:8px;background:#bc662c;color:white;font:inherit;font-weight:700;padding:11px 18px;cursor:pointer}.puGuidePracticeActions button:focus-visible,.puGuidePractice textarea:focus-visible{outline:3px solid #22588b;outline-offset:3px}@media(max-width:600px){.puGuidePractice{padding:16px}}</style>'''
+          if '</head>' not in s or '</body>' not in s:raise SystemExit('HTML closing tags missing')
+          s=s.replace('</head>',css+'</head>',1).replace('</body>',js+'</body>',1)
+          p.write_text(s)
+          assert s.count('id="puGuidePractice"')==1
+          assert s.count('id="pu-guide-practice-script"')==1
+          PY
+      - name: Commit update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then git commit -m "Add practical next-step activity to existing family guides"; git push; fi
