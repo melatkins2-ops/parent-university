@@ -1,0 +1,33 @@
+name: Connect age-based attendance ideas to Parent University
+on:
+  push:
+    paths: ['.github/workflows/connect-attendance-guide.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Connect attendance resource in existing guides
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html');s=p.read_text()
+          start=s.find('const guides=[');end=s.find('const guideDetails=',start)
+          if start<0 or end<0:raise SystemExit('Family guide definitions not found')
+          listing=s[start:end].replace('my scholar','my child').replace('My scholar','My child')
+          s=s[:start]+listing+s[end:]
+          marker="resources:[['GRPS Attendance','https://grps.org/attendance/'"
+          if s.count(marker)!=1:raise SystemExit('Attendance resource entry not found or duplicated')
+          s=s.replace(marker,"resources:[['Attendance ideas for every age','attendance-guide.html','Practical ideas for elementary, middle and high school families, with examples to try at home.'],['GRPS Attendance','https://grps.org/attendance/'",1)
+          if "attendance-guide.html" not in s:raise SystemExit('Guide integration failed')
+          p.write_text(s)
+          PY
+      - name: Commit integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then git commit -m "Connect age-based attendance ideas from existing family guide"; git push; fi
