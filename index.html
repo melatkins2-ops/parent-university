@@ -278,6 +278,16 @@ body:not(.puScrolled) .homeBtn,body:not(.puScrolled) .feedbackFab{opacity:0;poin
 @media(max-width:700px){.feedbackFab{display:none!important}.puFooterFeedback{display:inline-block}}
 </style>
 <script id="pu-nov-2026-qa-js">(function(){function u(){if(document.body)document.body.classList.toggle('puScrolled',window.scrollY>480)}window.addEventListener('scroll',u,{passive:true});document.addEventListener('DOMContentLoaded',u);})();</script>
+
+<style id="pu-back-inline">
+/* Phones: Back lives in the sticky breadcrumb bar instead of floating over text */
+@media (max-width:760px){
+  .contextNav .backBtn{position:static;box-shadow:none;padding:6px 12px;font-size:.9rem;border-width:1.5px;flex:0 0 auto}
+  .contextNav .crumbs{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .contextNav{top:var(--puHdr,110px)!important;justify-content:flex-start!important}
+}
+</style>
+<script>(function(){function fit(){var h=document.querySelector('.siteHeader');if(!h)return;var p=getComputedStyle(h).position;var v=(p==='sticky'||p==='fixed')?Math.round(h.getBoundingClientRect().height):0;document.documentElement.style.setProperty('--puHdr',v+'px')}addEventListener('resize',fit);addEventListener('load',fit);document.addEventListener('DOMContentLoaded',fit)})();</script>
 <link rel="icon" href="favicon.png">
 </head>
 <body>
